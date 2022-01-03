@@ -1,28 +1,51 @@
 import React from 'react';
 
 class CartItem extends React.Component {
-    constructor(){
-        super();
-        this.state = {
-            price: 999,
-            title: 'Phone',
-            qty: 1,
-            img: ''
-        }
-        
+   
+    /*using promises we can use setState which is asynchronous as synchronously ans so we will see the current value of state
+    testing (){
+        const promise = new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve('done');
+            },5000)
+        })
     }
+
+    promise.then(()=>{
+        //setState acts like a synchronous call
+        this.setState ({qty: this.state.qty + 10});
+        console.log('state', this.state);
+    })*/
+
     increaseQuantity = ()=>{
         console.log('this',this.state);
         //setState form 1
-        this.setState({
+        /*this.setState({
             qty: this.state.qty + 1
-        });
+        });*/
+        //setState form 2
+        this.setState((prevState =>{
+            return {
+                qty: prevState.qty +1
+            }
+        }));
+    }
+    decreaseQuantity = ()=>{
+        const {qty} = this.state;
+        if(qty === 0){
+            return;
+        }
+        this.setState((prevState =>{
+            return {
+                qty: prevState.qty - 1
+            }
+        }));
     }
 
 
 
     render() {
-        const {price,title,qty} = this.state;
+        const {price,title,qty} = this.props.product;
         return (
             <div className = "cart-item">
                 <div className="left-block">
@@ -45,6 +68,7 @@ class CartItem extends React.Component {
                             alt="decrease" 
                             className='action-icons' 
                             src="https://cdn-icons-png.flaticon.com/512/992/992683.png" 
+                            onClick={this.decreaseQuantity}
                         />
                         <img 
                             alt="delete" 
